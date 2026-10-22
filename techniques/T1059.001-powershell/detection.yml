@@ -1,0 +1,35 @@
+title: PowerShell Download Cradle
+id: 2c47230f-8260-40e3-bf53-40ef298ec553
+status: experimental
+description: >
+    Detects PowerShell script blocks that combine a web download with an execution
+    primitive, a pattern characteristic of in-memory download cradles (T1059.001).
+references:
+    - https://attack.mitre.org/techniques/T1059/001/
+author: Likhith H S
+date: 2026/10/23
+tags:
+    - attack.execution
+    - attack.t1059.001
+logsource:
+    product: windows
+    category: ps_script
+detection:
+    download:
+        ScriptBlockText|contains:
+            - 'New-Object Net.WebClient'
+            - '.DownloadString('
+            - '.DownloadFile('
+            - 'Invoke-WebRequest'
+            - 'Start-BitsTransfer'
+    execution:
+        ScriptBlockText|contains:
+            - 'IEX'
+            - 'Invoke-Expression'
+            - 'FromBase64String'
+            - '-enc'
+            - '-EncodedCommand'
+    condition: download and execution
+falsepositives:
+    - Administrative or software-deployment scripts that download and run content
+level: high
