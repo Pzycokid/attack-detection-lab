@@ -1,0 +1,27 @@
+title: Autorun Registry Run Key Modification
+id: 3d1f621c-901d-4eef-822e-f1778d09f928
+status: experimental
+description: >
+    Detects new or modified values written to the common Run / RunOnce autostart
+    registry keys, used to persist across reboots (T1547.001). Requires Sysmon
+    Event ID 13.
+references:
+    - https://attack.mitre.org/techniques/T1547/001/
+author: Likhith H S
+date: 2026/10/23
+tags:
+    - attack.persistence
+    - attack.t1547.001
+logsource:
+    product: windows
+    category: registry_set
+detection:
+    selection:
+        TargetObject|contains:
+            - '\Software\Microsoft\Windows\CurrentVersion\Run\'
+            - '\Software\Microsoft\Windows\CurrentVersion\RunOnce\'
+            - '\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders\'
+    condition: selection
+falsepositives:
+    - Legitimate applications registering themselves to start at logon
+level: medium
