@@ -1,0 +1,29 @@
+title: Scheduled Task Created via Command Line
+id: c0948f1a-c0af-47db-8323-49ae287fde55
+status: experimental
+description: >
+    Detects creation of a scheduled task through schtasks.exe or the PowerShell
+    scheduled-task cmdlets, a common persistence and execution mechanism (T1053.005).
+references:
+    - https://attack.mitre.org/techniques/T1053/005/
+author: Likhith H S
+date: 2026/10/23
+tags:
+    - attack.execution
+    - attack.persistence
+    - attack.t1053.005
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    schtasks:
+        Image|endswith: '\schtasks.exe'
+        CommandLine|contains: '/create'
+    powershell_cmdlet:
+        CommandLine|contains:
+            - 'Register-ScheduledTask'
+            - 'New-ScheduledTaskAction'
+    condition: schtasks or powershell_cmdlet
+falsepositives:
+    - Legitimate software installers and administrators creating scheduled jobs
+level: medium
