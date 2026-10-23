@@ -1,0 +1,25 @@
+title: Successful Remote Desktop (RDP) Logon
+id: f8abcbb1-0d81-4aaa-885f-bb29c353b34e
+status: experimental
+description: >
+    Detects successful interactive logons over RDP (LogonType 10). On its own this is
+    normal admin activity; alert value comes from correlating with unusual source hosts,
+    accounts, or times (T1021.001).
+references:
+    - https://attack.mitre.org/techniques/T1021/001/
+author: Likhith H S
+date: 2026/10/23
+tags:
+    - attack.lateral-movement
+    - attack.t1021.001
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4624
+        LogonType: 10
+    condition: selection
+falsepositives:
+    - Authorised remote administration and help-desk sessions
+level: low
